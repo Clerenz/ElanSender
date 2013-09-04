@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item 
+        android:id="@+id/menu_spec_1"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/spec_button1"/>
+	<item 
+        android:id="@+id/menu_spec_2"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/spec_button2"/>
+	<item 
+        android:id="@+id/menu_spec_3"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/spec_button3"/>
+	<item 
+        android:id="@+id/menu_spec_4"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/spec_button4"/>
+	<item 
+        android:id="@+id/menu_spec_5"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/spec_button5"/>
+    <item
+        android:id="@+id/menu_refresh_clients"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_refresh"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+
+</menu>

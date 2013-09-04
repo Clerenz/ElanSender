@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+	<string name="pref_category_con">Connectivity</string>
+	
+    <string name="pref_port_title">TCP port</string>
+    <string name="pref_port_desc">Set the port as defined on the receivers.\nCurrent value:</string>
+    <string name="pref_port_key">port_preference</string>
+    <string name="pref_port_default">59170</string>
+    
+    <string name="pref_category_ui">User interface</string>
+    
+    <string name="pref_notify_on_error_title">Notify on errors</string>
+    <string name="pref_notify_on_error_desc">Notify and stop further sending if an error occurred during sending.</string>
+    <string name="pref_notify_on_error_key">notify_preference</string>
+
+	<string name="pref_use_wipe_title">Use wipe</string>
+    <string name="pref_use_wipe_desc">Use contactless wiping for next song.</string>
+    <string name="pref_use_wipe_key">use_wipe_preference</string>
+    
+	<string name="pref_use_shake_title">Use shake</string>
+    <string name="pref_use_shake_desc">Use shaking the device for next song.</string>
+    <string name="pref_use_shake_key">use_shake_preference</string>
+    
+    <string name="pref_toast_invalid_port">Invalid port selected.</string>
+
+</resources>

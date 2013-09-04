@@ -1,0 +1,43 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory 
+        android:title="@string/pref_category_con">
+        
+    	<EditTextPreference
+        	android:capitalize="words"
+        	android:defaultValue="@string/pref_port_default"
+        	android:inputType="phone"
+        	android:digits="0123456789"
+        	android:key="@string/pref_port_key"
+        	android:maxLines="1"
+        	android:selectAllOnFocus="true"
+        	android:singleLine="true"
+        	android:title="@string/pref_port_title"
+        	android:summary="@string/pref_port_desc" />
+    
+    </PreferenceCategory>    
+    
+    <PreferenceCategory 
+        android:title="@string/pref_category_ui">
+    
+   		<CheckBoxPreference
+        	android:defaultValue="true"
+        	android:key="@string/pref_notify_on_error_key"
+        	android:summary="@string/pref_notify_on_error_desc"
+        	android:title="@string/pref_notify_on_error_title" />
+
+ 		<CheckBoxPreference
+        	android:defaultValue="false"
+        	android:key="@string/pref_use_wipe_key"
+        	android:summary="@string/pref_use_wipe_desc"
+        	android:title="@string/pref_use_wipe_title" />
+        
+		<CheckBoxPreference
+        	android:defaultValue="false"
+        	android:key="@string/pref_use_shake_key"
+        	android:summary="@string/pref_use_shake_desc"
+        	android:title="@string/pref_use_shake_title" />
+    
+	</PreferenceCategory>
+		
+</PreferenceScreen>

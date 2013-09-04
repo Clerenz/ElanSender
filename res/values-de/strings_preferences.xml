@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="title_activity_settings">Einstellungen</string>
+
+    <!-- Strings related to Settings -->
+
+	<string name="pref_category_con">Verbindung</string>
+
+    <string name="pref_port_title">TCP port</string>
+    <string name="pref_port_desc">Definiere den Port wie auf dem Empfänger.\nAktueller Wert:</string>
+    <string name="pref_port_key">port_preference</string>
+    <string name="pref_port_default">59170</string>
+    
+    <string name="pref_category_ui">Benutzeroberfläche</string>
+    
+    <string name="pref_notify_on_error_title">Abbruch bei Fehler</string>
+    <string name="pref_notify_on_error_desc">Zeige einen Hinweis und breche das Senden ab, sobald ein Fehler passiert.</string>
+    <string name="pref_notify_on_error_key">notify_preference</string>
+
+	<string name="pref_use_wipe_title">Wischen</string>
+    <string name="pref_use_wipe_desc">Verwende berührungsloses Wischen für das nächste Lied.</string>
+    <string name="pref_use_wipe_key">use_wipe_preference</string>
+    
+	<string name="pref_use_shake_title">Schütteln</string>
+    <string name="pref_use_shake_desc">Verwende Schütteln des Geräts für das nächste Lied.</string>
+    <string name="pref_use_shake_key">use_shake_preference</string>
+    
+    <string name="pref_toast_invalid_port">Ungültiger Port ausgewählt.</string>
+
+</resources>
