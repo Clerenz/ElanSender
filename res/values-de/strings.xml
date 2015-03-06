@@ -40,6 +40,7 @@
     <string name="message_port_error">Fehler mit angegebenem Port.</string>
     <string name="message_progress_searching">Suche…</string>
     <string name="message_progress_text">Suche nach Service in lokalem WLAN Netzwerk.</string>
+    <string name="message_no_device_configured">Keine gültige Adresse konfiguriert.</string>
 
     <string name="status_ap_not_enabled">Portabler WLAN hotspot ist nicht aktiviert.</string>
     <string name="status_connected_devices">Verbundene Geräte:</string>

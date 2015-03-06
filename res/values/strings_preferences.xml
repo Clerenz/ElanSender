@@ -5,9 +5,14 @@
     <!-- Strings related to Settings -->
 
 	<string name="pref_category_con">Connectivity</string>
-	
+
+    <string name="pref_ip_title">Receivers address</string>
+    <string name="pref_ip_desc">Set one or more IP addresses of receivers, comma separated.\nCurrent value:</string>
+    <string name="pref_ip_key">ip_preference</string>
+    <string name="pref_ip_default">192.168.1.1</string>
+
     <string name="pref_port_title">TCP port</string>
-    <string name="pref_port_desc">Set the port as defined on the receivers.\nCurrent value:</string>
+    <string name="pref_port_desc">Set the port as defined on the receiver.\nCurrent value:</string>
     <string name="pref_port_key">port_preference</string>
     <string name="pref_port_default">59170</string>
     

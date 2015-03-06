@@ -6,6 +6,11 @@
 
 	<string name="pref_category_con">Verbindung</string>
 
+    <string name="pref_ip_title">Empfänger Adresse</string>
+    <string name="pref_ip_desc">Definiere die IP-Adressen der Empfänger, kommagetrennt.\nAktueller Wert:</string>
+    <string name="pref_ip_key">ip_preference</string>
+    <string name="pref_ip_default">192.168.1.1</string>
+
     <string name="pref_port_title">TCP port</string>
     <string name="pref_port_desc">Definiere den Port wie auf dem Empfänger.\nAktueller Wert:</string>
     <string name="pref_port_key">port_preference</string>

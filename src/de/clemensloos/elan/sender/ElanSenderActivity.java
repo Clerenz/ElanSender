@@ -75,7 +75,11 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 
 	// properties
 	SharedPreferences sharedPreferences;
-	private boolean useHotspot = false;
+    // wifiMode
+    // 0: enter ip address
+    // 1: mobile WiFi hotspot
+    // 2: streamed service
+	private int wifiMode = 0;
 	private int defaultPort = -1;
 	private boolean stopOnHttpError = true;
 
@@ -184,7 +188,11 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 
 		// use hotspot
 		wifiApManager = new WifiApManager(ElanSenderActivity.this);
-		useHotspot = wifiApManager.isWifiApEnabled();
+        if (wifiApManager.isWifiApEnabled()) {
+            wifiMode = 1;
+        } else {
+            wifiMode = 0;
+        }
 
 		// default port
 		String portString = sharedPreferences.getString(getResources().getString(R.string.pref_port_key),
@@ -199,18 +207,25 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 		stopOnHttpError = sharedPreferences.getBoolean(getResources().getString(R.string.pref_notify_on_error_key),
 				true);
 
-		if (receiver.size() == 0) {
-			// Get clients (and send pending message, if there is one)
-			// hotspot mode
-			if (useHotspot) {
-				new AsyncGetClients().execute(ASYNC_IDENTIFIER_NONE);
-			}
-			// local WiFi mode
-			else {
-				callAsyncGetService();
-			}
-		}
+        // Get clients (and send pending message, if there is one)
+        if (receiver.size() == 0) {
+            refreshClients();
+        }
 	}
+
+    public void refreshClients() {
+        switch (wifiMode) {
+            case (0):
+                getClientsFromSettings();
+                break;
+            case (1):
+                new AsyncGetClients().execute(ASYNC_IDENTIFIER_NONE);
+                break;
+            case (2):
+                callAsyncGetService();
+                break;
+        }
+    }
 
 	@Override
 	protected void onPause() {
@@ -243,14 +258,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 
 		if (item.getItemId() == R.id.menu_refresh_clients) {
-			// hotspot mode
-			if (useHotspot) {
-				new AsyncGetClients().execute(ASYNC_IDENTIFIER_NONE);
-			}
-			// local WiFi mode
-			else {
-				callAsyncGetService();
-			}
+            refreshClients();
 		} else if (item.getItemId() == R.id.menu_settings) {
 			Intent intent = new Intent(this, SettingsActivity.class);
 			startActivity(intent);
@@ -353,6 +361,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 
 	}
 
+
 	@Override
 	public void serviceAdded(ServiceEvent serviceEvent) {
 		// ignore
@@ -392,6 +401,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 		alert.show();
 	}
 
+
 	private void encodeAndShow() {
 
 		String encVal = act;
@@ -410,14 +420,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 
 		// verify connectivity
 		if (receiver.size() == 0) {
-			// hotspot mode
-			if (useHotspot) {
-				new AsyncGetClients().execute(ASYNC_IDENTIFIER_SEND);
-			}
-			// local WiFi mode
-			else {
-				callAsyncGetService();
-			}
+            refreshClients();
 			return;
 		}
 
@@ -494,6 +497,39 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 		});
 	}
 
+
+    private void getClientsFromSettings() {
+
+        receiver = new ArrayList<Client>();
+
+        if (!Utils.isWiFiNetworkAvailable(this)) {
+            showMessage(R.string.message_no_network);
+            return;
+        }
+
+        String ipString = sharedPreferences.getString(getResources().getString(R.string.pref_ip_key),
+                getResources().getString(R.string.pref_ip_default));
+
+        if (ipString == null || ipString.equals("")) {
+            setStatus(getResources().getString(R.string.status_connected_devices) + " 0");
+            ElanSenderActivity.this.showMessage(R.string.message_no_device_configured);
+            return;
+        }
+
+        String[] addresses = ipString.split(",");
+        if (addresses.length == 0) {
+            setStatus(getResources().getString(R.string.status_connected_devices) + " 0");
+            ElanSenderActivity.this.showMessage(R.string.message_no_device_configured);
+            return;
+        }
+
+        for (String s : addresses) {
+            receiver.add(new Client(s));
+        }
+
+        setStatus(getResources().getString(R.string.status_connected_devices) + " " + receiver.size());
+    }
+
 	/**
 	 * Class that fetches the clients from the wifi ap
 	 */
@@ -553,6 +589,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 		}
 
 	}
+
 
 	private class AsyncGetService extends AsyncTask<Integer, Client, Boolean> {
 

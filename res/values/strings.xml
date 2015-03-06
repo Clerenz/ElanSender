@@ -40,6 +40,7 @@
     <string name="message_port_error">Error with specified port.</string>
     <string name="message_progress_searching">Searching&#8230;</string>
     <string name="message_progress_text">Searching for services in local wireless network.</string>
+    <string name="message_no_device_configured">No proper address configured.</string>
 
     <string name="status_ap_not_enabled">WiFi access point not enabled.</string>
     <string name="status_connected_devices">Connected devices:</string>

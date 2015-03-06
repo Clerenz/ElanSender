@@ -14,11 +14,12 @@ import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
 
-	
-	Preference portPreference;
+
 	SharedPreferences sharedPrefs;
-	
-	
+    Preference addressPreference;
+    Preference portPreference;
+
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +28,27 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.pref_general);
         
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
+        String address = sharedPrefs.getString(
+                getResources().getString(R.string.pref_ip_key),
+                getResources().getString(R.string.pref_ip_default));
+
+        addressPreference = findPreference(getResources().getString(R.string.pref_ip_key));
+        addressPreference.setSummary(getString(R.string.pref_ip_desc) + " " + address);
+        addressPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                addressPreference.setSummary(getString(R.string.pref_ip_desc) + " " + newValue.toString());
+                return true;
+            }
+        });
+
         String port = sharedPrefs.getString(
         		getResources().getString(R.string.pref_port_key),
         		getResources().getString(R.string.pref_port_default));
-        
+
         portPreference = findPreference(getResources().getString(R.string.pref_port_key));
         portPreference.setSummary(getString(R.string.pref_port_desc) + " " + port);
-        
         portPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -52,9 +67,6 @@ public class SettingsFragment extends PreferenceFragment {
 			    }
 			}
 		});
-        
     }
-	
-	
-	
+
 }

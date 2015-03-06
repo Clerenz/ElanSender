@@ -2,7 +2,18 @@
 
     <PreferenceCategory 
         android:title="@string/pref_category_con">
-        
+
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_ip_default"
+            android:inputType="text"
+            android:key="@string/pref_ip_key"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_ip_title"
+            android:summary="@string/pref_ip_desc" />
+
     	<EditTextPreference
         	android:capitalize="words"
         	android:defaultValue="@string/pref_port_default"
