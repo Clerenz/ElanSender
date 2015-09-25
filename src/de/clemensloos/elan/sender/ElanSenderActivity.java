@@ -700,6 +700,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
 					// Add your data
 					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 					nameValuePairs.add(new BasicNameValuePair("song", act));
+					nameValuePairs.add(new BasicNameValuePair("title", "Hier könnte Ihre Werbung stehen!"));
 					httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 					// Execute HTTP Post Request
