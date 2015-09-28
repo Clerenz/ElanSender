@@ -45,4 +45,5 @@
     <string name="status_ap_not_enabled">WiFi access point not enabled.</string>
     <string name="status_connected_devices">Connected devices:</string>
 
+    <string name="title_activity_import">Import song list</string>
 </resources>

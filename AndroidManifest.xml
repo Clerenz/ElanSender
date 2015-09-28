@@ -27,7 +27,6 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,6 +38,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
         </activity>
+        <activity
+            android:name=".ImportListActivity"
+            android:label="@string/title_activity_import">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.ms-excel" />
+                <data android:mimeType="application/msexcel" />
+                <data android:mimeType="application/x-msexcel" />
+                <data android:mimeType="application/x-ms-excel" />
+                <data android:mimeType="application/x-excel" />
+                <data android:mimeType="application/x-dos_ms_excel" />
+                <data android:mimeType="application/xls" />
+                <data android:mimeType="application/x-xls" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

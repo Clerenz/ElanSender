@@ -45,4 +45,5 @@
     <string name="status_ap_not_enabled">Portabler WLAN hotspot ist nicht aktiviert.</string>
     <string name="status_connected_devices">Verbundene Geräte:</string>
 
+    <string name="title_activity_import">Importiere Songliste</string>
 </resources>
