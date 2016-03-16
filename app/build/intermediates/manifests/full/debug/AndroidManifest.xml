@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.clemensloos.elan.sender"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="de.clemensloos.elan.sender.ElanSenderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="de.clemensloos.elan.sender.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="de.clemensloos.elan.sender.ElanSenderActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
+        </activity>
+        <activity
+            android:name="de.clemensloos.elan.sender.ImportListActivity"
+            android:label="@string/title_activity_import" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:mimeType="application/vnd.ms-excel" />
+                <data android:mimeType="application/msexcel" />
+                <data android:mimeType="application/x-msexcel" />
+                <data android:mimeType="application/x-ms-excel" />
+                <data android:mimeType="application/x-excel" />
+                <data android:mimeType="application/x-dos_ms_excel" />
+                <data android:mimeType="application/xls" />
+                <data android:mimeType="application/x-xls" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

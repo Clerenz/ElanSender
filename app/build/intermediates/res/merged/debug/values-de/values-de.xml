@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ElanSender</string>
+    <string name="font_name">DejaVuSansMono.ttf</string>
+    <string name="key0">0</string>
+    <string name="key1">1</string>
+    <string name="key2">2</string>
+    <string name="key3">3</string>
+    <string name="key4">4</string>
+    <string name="key5">5</string>
+    <string name="key6">6</string>
+    <string name="key7">7</string>
+    <string name="key8">8</string>
+    <string name="key9">9</string>
+    <string name="keyBlack">aus</string>
+    <string name="keyC">C</string>
+    <string name="keyNext">nächster</string>
+    <string name="keyS">S</string>
+    <string name="label_cancel">Abbrechen</string>
+    <string name="label_ok">Okay</string>
+    <string name="mdns_service_name">elan-next-song</string>
+    <string name="mdns_service_type">_http._tcp.local.</string>
+    <string name="menu_refresh">Aktualisieren</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="message_activate_service">Service streaming auf dem Tablet aktivieren, dann mit Okay bestätigen.</string>
+    <string name="message_ap_not_enabled">Portabler WLAN hotspot ist nicht aktiviert.</string>
+    <string name="message_device_not_reachable">Verbundene Geräte nicht erreichbar.</string>
+    <string name="message_error_device">Fehler beim Senden der Nachricht zum Gerät</string>
+    <string name="message_error_sending">Fehler beim Senden der Nachricht..</string>
+    <string name="message_error_service">Fehler beim Suchen des Service.valuesvaluesvalues</string>
+    <string name="message_no_device">Kein Gerät verbunden.</string>
+    <string name="message_no_device_configured">Keine gültige Adresse konfiguriert.</string>
+    <string name="message_no_device_refresh">Kein Gerät verbunden. Bitte aktualisieren.</string>
+    <string name="message_no_network">Kein WLAN Netz verfügbar.</string>
+    <string name="message_no_service">Kein Gerät gefunden.</string>
+    <string name="message_port_error">Fehler mit angegebenem Port.</string>
+    <string name="message_progress_searching">Suche…</string>
+    <string name="message_progress_text">Suche nach Service in lokalem WLAN Netzwerk.</string>
+    <string name="pref_category_con">Verbindung</string>
+    <string name="pref_category_ui">Benutzeroberfläche</string>
+    <string name="pref_ip_default">192.168.1.1</string>
+    <string name="pref_ip_desc">Definiere die IP-Adressen der Empfänger, kommagetrennt.\nAktueller Wert:</string>
+    <string name="pref_ip_key">ip_preference</string>
+    <string name="pref_ip_title">Empfänger Adresse</string>
+    <string name="pref_notify_on_error_desc">Zeige einen Hinweis und breche das Senden ab, sobald ein Fehler passiert.</string>
+    <string name="pref_notify_on_error_key">notify_preference</string>
+    <string name="pref_notify_on_error_title">Abbruch bei Fehler</string>
+    <string name="pref_port_default">59170</string>
+    <string name="pref_port_desc">Definiere den Port wie auf dem Empfänger.\nAktueller Wert:</string>
+    <string name="pref_port_key">port_preference</string>
+    <string name="pref_port_title">TCP port</string>
+    <string name="pref_toast_invalid_port">Ungültiger Port ausgewählt.</string>
+    <string name="pref_use_shake_desc">Verwende Schütteln des Geräts für das nächste Lied.</string>
+    <string name="pref_use_shake_key">use_shake_preference</string>
+    <string name="pref_use_shake_title">Schütteln</string>
+    <string name="pref_use_wipe_desc">Verwende berührungsloses Wischen für das nächste Lied.</string>
+    <string name="pref_use_wipe_key">use_wipe_preference</string>
+    <string name="pref_use_wipe_title">Wischen</string>
+    <string name="spec_button1">Smiley</string>
+    <string name="spec_button2">Pause</string>
+    <string name="spec_button3">Tod</string>
+    <string name="spec_button4">Peace</string>
+    <string name="spec_button5">Elan logo</string>
+    <string name="spec_ident">x</string>
+    <string name="spec_value1">x263A</string>
+    <string name="spec_value2">x2615</string>
+    <string name="spec_value3">x2620</string>
+    <string name="spec_value4">x270C</string>
+    <string name="spec_value5">El</string>
+    <string name="status_ap_not_enabled">Portabler WLAN hotspot ist nicht aktiviert.</string>
+    <string name="status_connected_devices">Verbundene Geräte:</string>
+    <string name="title_activity_import">Importiere Songliste</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>

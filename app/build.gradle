@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "de.clemensloos.elan.sender"
+        minSdkVersion 14
+        targetSdkVersion 17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:21.0.3'
+    compile files('libs/httpcore-4.2.1.jar')
+    compile files('libs/httpcore-ab-4.2.1.jar')
+    compile files('libs/httpcore-nio-4.2.1.jar')
+    compile files('libs/jmdns_own.jar')
+}

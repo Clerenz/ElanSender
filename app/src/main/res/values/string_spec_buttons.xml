@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="spec_button1">Smiley</string>
+    <string name="spec_button2">Pause</string>
+    <string name="spec_button3">Kill</string>
+    <string name="spec_button4">Peace</string>
+    <string name="spec_button5">Elan logo</string>
+    
+    <string name="spec_value1">x263A</string>
+    <string name="spec_value2">x2615</string>
+    <string name="spec_value3">x2620</string>
+    <string name="spec_value4">x270C</string>
+    <string name="spec_value5">El</string>
+    
+    <string name="spec_ident">x</string>
+    
+    
+</resources>
