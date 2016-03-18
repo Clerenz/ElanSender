@@ -14,7 +14,7 @@ public class ImportListActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.import_list);
+        //setContentView(R.layout.import_list);
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -23,8 +23,8 @@ public class ImportListActivity extends Activity {
 
             Uri uri2 = intent.getData();
             String uri = uri2.getEncodedPath() + "  complete: " + uri2.toString();
-            TextView textView = (TextView)findViewById(R.id.text_imported);
-            textView.setText(uri);
+            //TextView textView = (TextView)findViewById(R.id.text_imported);
+            //textView.setText(uri);
 
         }
 

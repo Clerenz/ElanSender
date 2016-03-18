@@ -1,8 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'http://repo1.maven.org/maven2' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.2'
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "de.clemensloos.elan.sender"
@@ -18,10 +28,12 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    compile 'com.android.support:support-v4:21.0.3'
-    compile files('libs/httpcore-4.2.1.jar')
-    compile files('libs/httpcore-ab-4.2.1.jar')
-    compile files('libs/httpcore-nio-4.2.1.jar')
     compile files('libs/jmdns_own.jar')
+    compile 'com.android.support:support-v4:23.0.0'
+    compile 'org.apache.httpcomponents:httpclient:4.5.2'
 }

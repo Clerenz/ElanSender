@@ -38,6 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
         </activity>
+        <!--
         <activity
             android:name=".ImportListActivity"
             android:label="@string/title_activity_import">
@@ -57,6 +58,7 @@
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
             </intent-filter>
         </activity>
+        -->
 
     </application>
 
