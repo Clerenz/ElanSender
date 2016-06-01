@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -38,7 +39,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
         </activity>
-        <!--
         <activity
             android:name=".ImportListActivity"
             android:label="@string/title_activity_import">
@@ -55,10 +55,9 @@
                 <data android:mimeType="application/x-dos_ms_excel" />
                 <data android:mimeType="application/xls" />
                 <data android:mimeType="application/x-xls" />
-                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <!--<data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />-->
             </intent-filter>
         </activity>
-        -->
 
     </application>
 
