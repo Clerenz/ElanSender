@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ElanSender.iml" filepath="$PROJECT_DIR$/ElanSender.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/elan-sender/elan-sender.iml" filepath="$PROJECT_DIR$/elan-sender/elan-sender.iml" />
     </modules>
   </component>
 </project>
