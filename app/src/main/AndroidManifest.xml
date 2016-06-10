@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.clemensloos.elan.sender"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -14,38 +14,44 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="de.clemensloos.elan.sender.ElanSenderActivity"
+            android:name=".ElanSenderActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="de.clemensloos.elan.sender.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="de.clemensloos.elan.sender.ElanSenderActivity" >
+            android:parentActivityName=".ElanSenderActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
         </activity>
-        <!--
         <activity
             android:name=".ImportListActivity"
             android:label="@string/title_activity_import">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:mimeType="application/vnd.ms-excel" />
                 <data android:mimeType="application/msexcel" />
@@ -55,11 +61,22 @@
                 <data android:mimeType="application/x-dos_ms_excel" />
                 <data android:mimeType="application/xls" />
                 <data android:mimeType="application/x-xls" />
-                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <!-- <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> -->
             </intent-filter>
         </activity>
-        -->
-
+        <activity
+            android:name=".WifiQueryActivity"
+            android:label="@string/title_activity_wifi_query"
+            android:parentActivityName=".ElanSenderActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
+        </activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
