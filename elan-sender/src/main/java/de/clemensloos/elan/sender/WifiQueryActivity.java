@@ -48,6 +48,7 @@ public class WifiQueryActivity extends Activity {
     private TextView status;
 
     private boolean discoveryRunning = false;
+    private List<String> lastResults;
 
     private int defaultPort;
 
@@ -73,6 +74,7 @@ public class WifiQueryActivity extends Activity {
                 start.setEnabled(false);
                 okay.setEnabled(false);
                 discoveryRunning = true;
+                lastResults = null;
                 new AsyncSearch().execute("");
             }
         });
@@ -92,8 +94,16 @@ public class WifiQueryActivity extends Activity {
         okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(WifiQueryActivity.this);
-
+                if (lastResults != null && lastResults.size() > 0) {
+                    String value = "";
+                    for (String s : lastResults) {
+                        value += s + ",";
+                    }
+                    SharedPreferences.Editor sharedPrefsEditor = PreferenceManager.getDefaultSharedPreferences(WifiQueryActivity.this).edit();
+                    sharedPrefsEditor.putString(getResources().getString(R.string.pref_ip_key), value);
+                    sharedPrefsEditor.commit();
+                    finish();
+                }
             }
         });
 
@@ -273,6 +283,7 @@ public class WifiQueryActivity extends Activity {
             progressAnalyze.setIndeterminate(false);
             status.setText("Found " + result.size() + " devices running the receiver.");
             if (result.size() > 0) {
+                lastResults = result;
                 okay.setEnabled(true);
             }
 
