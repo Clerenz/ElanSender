@@ -17,7 +17,12 @@ import org.apache.poi.ss.usermodel.Row;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import de.clemensloos.elan.sender.database.DatabaseHandler;
+import de.clemensloos.elan.sender.database.Song;
 
 
 /**
@@ -49,19 +54,24 @@ public class ImportListActivity extends Activity {
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 TableLayout table = (TableLayout) findViewById(R.id.song_table);
+                List<Song> songList = new ArrayList<>();
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
-                    double nr = row.getCell(0).getNumericCellValue();
+                    int nr = (int)Math.rint(row.getCell(0).getNumericCellValue());
                     String title = row.getCell(1).getStringCellValue();
-                    String inter = row.getCell(2).getStringCellValue();
+                    String artist = row.getCell(2).getStringCellValue();
+                    songList.add(new Song(nr, title, artist));
                     TableRow rowView = (TableRow)inflater.inflate(R.layout.import_table_row, null);
                     ((TextView)rowView.findViewById(R.id.number)).setText("" + nr);
                     ((TextView)rowView.findViewById(R.id.title)).setText(title);
-                    ((TextView)rowView.findViewById(R.id.interpret)).setText(inter);
+                    ((TextView)rowView.findViewById(R.id.interpret)).setText(artist);
                     table.addView(rowView);
                 }
                 //table.addView(rowView);
 
+                DatabaseHandler dbh = new DatabaseHandler(this);
+                dbh.clearSongs();
+                dbh.addSongs(songList);
 
             }
             catch(IOException e) {

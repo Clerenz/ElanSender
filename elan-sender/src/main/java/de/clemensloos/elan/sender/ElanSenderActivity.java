@@ -27,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -55,6 +56,9 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
+
+import de.clemensloos.elan.sender.database.DatabaseHandler;
+import de.clemensloos.elan.sender.database.Song;
 
 public class ElanSenderActivity extends Activity implements SensorEventListener, ServiceListener {
 
@@ -767,8 +771,10 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<>(2);
                     nameValuePairs.add(new BasicNameValuePair("song", act));
-                    nameValuePairs.add(new BasicNameValuePair("title", "Hier könnte Ihre Werbung stehen!"));
-                    nameValuePairs.add(new BasicNameValuePair("artist", "Müller"));
+                    DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
+                    Song song = dbh.getSongById(Integer.parseInt(act));
+                    nameValuePairs.add(new BasicNameValuePair("title", song.getTitle()));
+                    nameValuePairs.add(new BasicNameValuePair("artist", song.getArtist()));
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     // Execute HTTP Post Request
