@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,11 +31,19 @@ import de.clemensloos.elan.sender.database.Song;
  * Created by Clemens.Loos on 28.09.2015.
  */
 public class ImportListActivity extends Activity {
+
+    List<Song> songList;
+    Button okay;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        songList = null;
+
         setContentView(R.layout.import_list);
+        okay = ((Button)findViewById(R.id.but_okay_import));
+        okay.setEnabled(false);
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -54,30 +64,51 @@ public class ImportListActivity extends Activity {
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 TableLayout table = (TableLayout) findViewById(R.id.song_table);
-                List<Song> songList = new ArrayList<>();
+                songList = new ArrayList<>();
+                TableRow rowView = (TableRow)inflater.inflate(R.layout.import_table_row, null);
+                ((TextView)rowView.findViewById(R.id.number)).setText("#");
+                ((TextView)rowView.findViewById(R.id.title)).setText("Title");
+                ((TextView)rowView.findViewById(R.id.interpret)).setText("Artist");
+                table.addView(rowView);
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     int nr = (int)Math.rint(row.getCell(0).getNumericCellValue());
                     String title = row.getCell(1).getStringCellValue();
                     String artist = row.getCell(2).getStringCellValue();
                     songList.add(new Song(nr, title, artist));
-                    TableRow rowView = (TableRow)inflater.inflate(R.layout.import_table_row, null);
+                    rowView = (TableRow)inflater.inflate(R.layout.import_table_row, null);
                     ((TextView)rowView.findViewById(R.id.number)).setText("" + nr);
                     ((TextView)rowView.findViewById(R.id.title)).setText(title);
                     ((TextView)rowView.findViewById(R.id.interpret)).setText(artist);
                     table.addView(rowView);
+                    okay.setEnabled(true);
                 }
                 //table.addView(rowView);
 
-                DatabaseHandler dbh = new DatabaseHandler(this);
-                dbh.clearSongs();
-                dbh.addSongs(songList);
-
             }
             catch(IOException e) {
-
+                finish();
             }
 
+            ((Button)findViewById(R.id.but_cancel_import)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            okay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (songList != null && songList.size() > 0) {
+                        DatabaseHandler dbh = new DatabaseHandler(ImportListActivity.this);
+                        dbh.clearSongs();
+                        dbh.addSongs(songList);
+                    }
+                    finish();
+                }
+            });
 
 
         }
