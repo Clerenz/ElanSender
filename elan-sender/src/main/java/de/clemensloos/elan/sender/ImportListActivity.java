@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.File;
@@ -72,9 +73,18 @@ public class ImportListActivity extends Activity {
                 table.addView(rowView);
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
+                    if (row.getCell(0) == null || row.getCell(0).getCellType() != Cell.CELL_TYPE_NUMERIC) {
+                        continue;
+                    }
                     int nr = (int)Math.rint(row.getCell(0).getNumericCellValue());
-                    String title = row.getCell(1).getStringCellValue();
-                    String artist = row.getCell(2).getStringCellValue();
+                    String title = "";
+                    if (row.getCell(1) != null && row.getCell(1).getCellType() == Cell.CELL_TYPE_STRING) {
+                        title = row.getCell(1).getStringCellValue();
+                    }
+                    String artist = "";
+                    if (row.getCell(2) != null && row.getCell(2).getCellType() == Cell.CELL_TYPE_STRING) {
+                        artist = row.getCell(2).getStringCellValue();
+                    }
                     songList.add(new Song(nr, title, artist));
                     rowView = (TableRow)inflater.inflate(R.layout.import_table_row, null);
                     ((TextView)rowView.findViewById(R.id.number)).setText("" + nr);
