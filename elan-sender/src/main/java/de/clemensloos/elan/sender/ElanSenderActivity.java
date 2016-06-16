@@ -228,9 +228,9 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
                 true);
 
         // Get clients (and send pending message, if there is one)
-        if (receiver.size() == 0) {
+        //if (receiver.size() == 0) {
             refreshClients();
-        }
+        //}
     }
 
     public void refreshClients() {
@@ -293,7 +293,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
             act = getResources().getString(R.string.spec_value2);
             encodeAndShow();
             sendHttp();
-        } else if (item.getItemId() == R.id.menu_spec_3) {
+/*        } else if (item.getItemId() == R.id.menu_spec_3) {
             act = getResources().getString(R.string.spec_value3);
             encodeAndShow();
             sendHttp();
@@ -304,7 +304,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         } else if (item.getItemId() == R.id.menu_spec_5) {
             act = getResources().getString(R.string.spec_value5);
             textViewAct.setText(act);
-            sendHttp();
+            sendHttp();*/
         }
 
         return super.onMenuItemSelected(featureId, item);

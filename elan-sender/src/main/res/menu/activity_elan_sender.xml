@@ -10,7 +10,7 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/spec_button2"/>
-	<item 
+	<!--<item
         android:id="@+id/menu_spec_3"
         android:orderInCategory="100"
         android:showAsAction="never"
@@ -24,7 +24,7 @@
         android:id="@+id/menu_spec_5"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/spec_button5"/>
+        android:title="@string/spec_button5"/>-->
     <item
         android:id="@+id/menu_refresh_clients"
         android:orderInCategory="100"
