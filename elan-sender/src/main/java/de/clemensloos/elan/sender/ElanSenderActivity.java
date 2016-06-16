@@ -772,9 +772,14 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
                     List<NameValuePair> nameValuePairs = new ArrayList<>(2);
                     nameValuePairs.add(new BasicNameValuePair("song", act));
                     DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
-                    Song song = dbh.getSongById(Integer.parseInt(act));
-                    nameValuePairs.add(new BasicNameValuePair("title", song.getTitle()));
-                    nameValuePairs.add(new BasicNameValuePair("artist", song.getArtist()));
+                    Song song = null;
+                    try {
+                        song = dbh.getSongById(Integer.parseInt(act));
+                    } catch (NumberFormatException e) {
+
+                    }
+                    nameValuePairs.add(new BasicNameValuePair("title", (song == null) ? "" : song.getTitle()));
+                    nameValuePairs.add(new BasicNameValuePair("artist", (song == null) ? "" : song.getArtist()));
                     httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     // Execute HTTP Post Request
