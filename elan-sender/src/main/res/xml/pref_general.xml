@@ -25,6 +25,18 @@
         	android:singleLine="true"
         	android:title="@string/pref_port_title"
         	android:summary="@string/pref_port_desc" />
+
+		<EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_timeout_default"
+            android:inputType="phone"
+            android:digits="0123456789"
+            android:key="@string/pref_timeout_key"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_timeout_title"
+            android:summary="@string/pref_timeout_desc" />
     
     </PreferenceCategory>    
     

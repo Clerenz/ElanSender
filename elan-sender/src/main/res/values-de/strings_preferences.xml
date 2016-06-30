@@ -15,6 +15,11 @@
     <string name="pref_port_desc">Definiere den Port wie auf dem Empfänger.\nAktueller Wert:</string>
     <string name="pref_port_key">port_preference</string>
     <string name="pref_port_default">59170</string>
+
+    <string name="pref_timeout_title">HTTP Timeout</string>
+    <string name="pref_timeout_desc">Timeout für HTTP Requests.</string>
+    <string name="pref_timeout_key">timeout_preference</string>
+    <string name="pref_timeout_default">2</string>
     
     <string name="pref_category_ui">Benutzeroberfläche</string>
     
