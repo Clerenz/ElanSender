@@ -12,13 +12,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,9 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.whitebyte.wifihotspotutils.ClientScanResult;
@@ -37,7 +35,6 @@ import com.whitebyte.wifihotspotutils.WifiApManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -107,11 +104,6 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
     private boolean handOver = false;
 
     private MulticastLock lock;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -551,45 +543,45 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         setStatus(getResources().getString(R.string.status_connected_devices) + " " + receiver.size());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+//        // ATTENTION: This was auto-generated to implement the App Indexing API.
+//        // See https://g.co/AppIndexing/AndroidStudio for more information.
+//        client.connect();
+//        Action viewAction = Action.newAction(
+//                Action.TYPE_VIEW, // TODO: choose an action type.
+//                "ElanSender Page", // TODO: Define a title for the content shown.
+//                // TODO: If you have web page content that matches this app activity's content,
+//                // make sure this auto-generated web page URL is correct.
+//                // Otherwise, set the URL to null.
+//                Uri.parse("http://host/path"),
+//                // TODO: Make sure this auto-generated app deep link URI is correct.
+//                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
+//        );
+//        AppIndex.AppIndexApi.start(client, viewAction);
+//    }
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "ElanSender Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "ElanSender Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//
+//        // ATTENTION: This was auto-generated to implement the App Indexing API.
+//        // See https://g.co/AppIndexing/AndroidStudio for more information.
+//        Action viewAction = Action.newAction(
+//                Action.TYPE_VIEW, // TODO: choose an action type.
+//                "ElanSender Page", // TODO: Define a title for the content shown.
+//                // TODO: If you have web page content that matches this app activity's content,
+//                // make sure this auto-generated web page URL is correct.
+//                // Otherwise, set the URL to null.
+//                Uri.parse("http://host/path"),
+//                // TODO: Make sure this auto-generated app deep link URI is correct.
+//                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
+//        );
+//        AppIndex.AppIndexApi.end(client, viewAction);
+//        client.disconnect();
+//    }
 
     /**
      * Class that fetches the clients from the wifi ap
@@ -745,58 +737,70 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         @Override
         protected Boolean doInBackground(Object... receivers) {
 
+            int retry = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_retry_key), "0"));
+
             for (Object obj : receivers) {
 
                 if (!(obj instanceof Client)) {
                     continue;
                 }
                 Client client = (Client) obj;
+                boolean clientSuc = false;
 
-                try {
-                    URI uri = new URL("http", client.ip, client.port, "").toURI();
+                for (int i=0; i<=retry; i++) {
 
-                    HttpParams httpParameters = new BasicHttpParams();
-                    // Set the timeout in milliseconds until a connection is established.
-                    // The default value is zero, that means the timeout is not used.
-                    int timeoutConnection = 1000;
-                    HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-                    // Set the default socket timeout (SO_TIMEOUT)
-                    // in milliseconds which is the timeout for waiting for data.
-                    int timeoutSocket = 1000;
-                    HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+                    Log.d("ElanSender", "Retry " + i);
 
-                    DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-                    HttpPost httpPost = new HttpPost(uri);
-
-                    // Add your data
-                    List<NameValuePair> nameValuePairs = new ArrayList<>(2);
-                    nameValuePairs.add(new BasicNameValuePair("song", act));
-                    DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
-                    Song song = null;
                     try {
-                        song = dbh.getSongById(Integer.parseInt(act));
-                    } catch (NumberFormatException e) {
 
-                    }
-                    nameValuePairs.add(new BasicNameValuePair("title", (song == null) ? "" : song.getTitle()));
-                    nameValuePairs.add(new BasicNameValuePair("artist", (song == null) ? "" : song.getArtist()));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                        URI uri = new URL("http", client.ip, client.port, "").toURI();
 
-                    // Execute HTTP Post Request
-                    HttpResponse response = httpClient.execute(httpPost);
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status < 200 || status >= 300) {
-                        if (stopOnHttpError) {
-                            publishProgress(client);
-                            return false;
+                        HttpParams httpParameters = new BasicHttpParams();
+
+                        // Set the timeout in milliseconds until a connection is established.
+                        // The default value is zero, that means the timeout is not used.
+                        int timeoutConfig = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_timeout_key), "2"));
+                        int timeoutConnection = 1000 * timeoutConfig;
+                        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+                        // Set the default socket timeout (SO_TIMEOUT)
+                        // in milliseconds which is the timeout for waiting for data.
+                        int timeoutSocket = 1000 * timeoutConfig;
+                        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+                        DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+                        HttpPost httpPost = new HttpPost(uri);
+
+                        // Add your data
+                        List<NameValuePair> nameValuePairs = new ArrayList<>(2);
+                        nameValuePairs.add(new BasicNameValuePair("song", act));
+
+                        DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
+                        Song song = null;
+                        try {
+                            song = dbh.getSongById(Integer.parseInt(act));
+                        } catch (NumberFormatException e) {
+                            // ignore
                         }
-                    }
+                        nameValuePairs.add(new BasicNameValuePair("title", (song == null) ? "" : song.getTitle()));
+                        nameValuePairs.add(new BasicNameValuePair("artist", (song == null) ? "" : song.getArtist()));
+                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-                } catch (Exception e) {
-                    if (stopOnHttpError) {
-                        publishProgress(client);
-                        return false;
+                        // Execute HTTP Post Request
+                        HttpResponse response = httpClient.execute(httpPost);
+                        int status = response.getStatusLine().getStatusCode();
+                        if (status >= 200 && status < 300) {
+                            clientSuc = true;
+                            break;
+                        }
+
+                    } catch (Exception e) {
+                        // ignore
                     }
+                }
+
+                if (!clientSuc && stopOnHttpError) {
+                    publishProgress(client);
+                    return false;
                 }
             }
             return true;

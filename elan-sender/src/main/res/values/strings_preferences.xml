@@ -20,6 +20,11 @@
     <string name="pref_timeout_desc">Set the timeout for HTTP requests.</string>
     <string name="pref_timeout_key">timeout_preference</string>
     <string name="pref_timeout_default">2</string>
+
+    <string name="pref_retry_title">Retry sending</string>
+    <string name="pref_retry_desc">Set number of retries for sending.</string>
+    <string name="pref_retry_key">retry_preference</string>
+    <string name="pref_retry_default">0</string>
     
     <string name="pref_category_ui">User interface</string>
     

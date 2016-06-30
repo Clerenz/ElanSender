@@ -37,6 +37,18 @@
             android:singleLine="true"
             android:title="@string/pref_timeout_title"
             android:summary="@string/pref_timeout_desc" />
+
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_retry_default"
+            android:inputType="phone"
+            android:digits="0123456789"
+            android:key="@string/pref_retry_key"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_retry_title"
+            android:summary="@string/pref_retry_desc" />
     
     </PreferenceCategory>    
     
