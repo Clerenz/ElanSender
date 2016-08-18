@@ -1,10 +1,8 @@
 package de.clemensloos.elan.sender;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -12,7 +10,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,8 +25,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.whitebyte.wifihotspotutils.ClientScanResult;
 import com.whitebyte.wifihotspotutils.WifiApManager;
 
@@ -43,21 +38,23 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceEvent;
-import javax.jmdns.ServiceInfo;
-import javax.jmdns.ServiceListener;
+//import javax.jmdns.JmDNS;
+//import javax.jmdns.ServiceEvent;
+//import javax.jmdns.ServiceInfo;
+//import javax.jmdns.ServiceListener;
 
 import de.clemensloos.elan.sender.database.DatabaseHandler;
 import de.clemensloos.elan.sender.database.Song;
 
-public class ElanSenderActivity extends Activity implements SensorEventListener, ServiceListener {
+public class ElanSenderActivity extends Activity implements SensorEventListener {
 
     private static final int ASYNC_IDENTIFIER_NONE = 0;
     private static final int ASYNC_IDENTIFIER_SEND = 1;
@@ -78,16 +75,14 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
     private String last = "";
 
     private WifiApManager wifiApManager = null;
-    private ArrayList<Client> receiver = new ArrayList<>();
+    private List<Client> receiver = new ArrayList<>();
 
-    private JmDNS mdnsService;
 
     // properties
     SharedPreferences sharedPreferences;
     // wifiMode
     // 0: enter ip address
     // 1: mobile WiFi hotspot
-    // 2: streamed service
     private int wifiMode = 0;
     private int defaultPort = -1;
     private boolean stopOnHttpError = true;
@@ -229,9 +224,9 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
             case (1):
                 new AsyncGetClients().execute(ASYNC_IDENTIFIER_NONE);
                 break;
-            case (2):
-                callAsyncGetService();
-                break;
+//            case (2):
+//                callAsyncGetService();
+//                break;
         }
     }
 
@@ -281,18 +276,6 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
             act = getResources().getString(R.string.spec_value2);
             encodeAndShow();
             sendHttp();
-/*        } else if (item.getItemId() == R.id.menu_spec_3) {
-            act = getResources().getString(R.string.spec_value3);
-            encodeAndShow();
-            sendHttp();
-        } else if (item.getItemId() == R.id.menu_spec_4) {
-            act = getResources().getString(R.string.spec_value4);
-            encodeAndShow();
-            sendHttp();
-        } else if (item.getItemId() == R.id.menu_spec_5) {
-            act = getResources().getString(R.string.spec_value5);
-            textViewAct.setText(act);
-            sendHttp();*/
         }
 
         return super.onMenuItemSelected(featureId, item);
@@ -373,46 +356,6 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
     }
 
 
-    @Override
-    public void serviceAdded(ServiceEvent serviceEvent) {
-        // ignore
-    }
-
-    @Override
-    public void serviceRemoved(ServiceEvent serviceEvent) {
-        // ignore
-    }
-
-    @Override
-    public void serviceResolved(ServiceEvent serviceEvent) {
-        // ignore
-    }
-
-    private void callAsyncGetService() {
-
-        if (!Utils.isWiFiNetworkAvailable(this)) {
-            showMessage(R.string.message_no_network);
-            return;
-        }
-
-        final AlertDialog.Builder alert = new AlertDialog.Builder(ElanSenderActivity.this);
-        // customize alert dialog to allow desired input
-        alert.setMessage(R.string.message_activate_service);
-        alert.setPositiveButton(getResources().getString(R.string.label_ok), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                new AsyncGetService().execute(ASYNC_IDENTIFIER_NONE);
-            }
-        });
-        alert.setNegativeButton(getResources().getString(R.string.label_cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        alert.show();
-    }
-
-
     private void encodeAndShow() {
 
         String encVal = act;
@@ -436,7 +379,7 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         }
 
         // send http message
-        new AsyncSendHttp().execute(receiver.toArray());
+        new AsyncSendHttp().execute(receiver.toArray(new Client[receiver.size()]));
 
     }
 
@@ -539,45 +482,6 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         setStatus(getResources().getString(R.string.status_connected_devices) + " " + receiver.size());
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        client.connect();
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "ElanSender Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app deep link URI is correct.
-//                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
-//        );
-//        AppIndex.AppIndexApi.start(client, viewAction);
-//    }
-
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//
-//        // ATTENTION: This was auto-generated to implement the App Indexing API.
-//        // See https://g.co/AppIndexing/AndroidStudio for more information.
-//        Action viewAction = Action.newAction(
-//                Action.TYPE_VIEW, // TODO: choose an action type.
-//                "ElanSender Page", // TODO: Define a title for the content shown.
-//                // TODO: If you have web page content that matches this app activity's content,
-//                // make sure this auto-generated web page URL is correct.
-//                // Otherwise, set the URL to null.
-//                Uri.parse("http://host/path"),
-//                // TODO: Make sure this auto-generated app deep link URI is correct.
-//                Uri.parse("android-app://de.clemensloos.elan.sender/http/host/path")
-//        );
-//        AppIndex.AppIndexApi.end(client, viewAction);
-//        client.disconnect();
-//    }
 
     /**
      * Class that fetches the clients from the wifi ap
@@ -633,114 +537,51 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
         protected void onPostExecute(Boolean successful) {
 
             if (successful && flag == ASYNC_IDENTIFIER_SEND) {
-                new AsyncSendHttp().execute(receiver.toArray());
+                new AsyncSendHttp().execute(receiver.toArray(new Client[receiver.size()]));
             }
         }
 
     }
 
-
-    private class AsyncGetService extends AsyncTask<Integer, Client, Boolean> {
-
-        private int flag = 0;
-
-        // Before running code in separate thread
-        @Override
-        protected void onPreExecute() {
-
-            // Create progress dialog
-            progressDialog = new ProgressDialog(ElanSenderActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getResources().getString(R.string.message_progress_searching));
-            progressDialog.setMessage(getResources().getString(R.string.message_progress_text));
-            progressDialog.setCancelable(false);
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-
-            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            lock = wifi.createMulticastLock("GetReceiversLock");
-            lock.setReferenceCounted(true);
-            lock.acquire();
-
-        }
-
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-
-            flag = params[0];
-
-            // clear old results
-            receiver = new ArrayList<>();
-            ServiceInfo serviceInfo[];
-
-            try {
-                mdnsService = JmDNS.create();
-                mdnsService.addServiceListener(getResources().getString(R.string.mdns_service_name),
-                        ElanSenderActivity.this);
-
-                serviceInfo = mdnsService.list(getResources().getString(R.string.mdns_service_type), 6000);
-
-                mdnsService.removeServiceListener(getResources().getString(R.string.mdns_service_name),
-                        ElanSenderActivity.this);
-                mdnsService.close();
-
-            } catch (IOException e) {
-                showMessage(R.string.message_error_service);
-                setStatus(getResources().getString(R.string.status_connected_devices) + " 0");
-                return false;
-            }
-
-            if (serviceInfo == null || serviceInfo.length == 0) {
-                showMessage(R.string.message_no_service);
-                setStatus(getResources().getString(R.string.status_connected_devices) + " 0");
-                return false;
-            } else {
-
-                for (ServiceInfo info : serviceInfo) {
-                    receiver.add(new Client(info.getHostAddresses()[0], info.getPort()));
-                }
-                setStatus(getResources().getString(R.string.status_connected_devices) + " " + receiver.size());
-                return true;
-            }
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Client... clients) {
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean successful) {
-
-            lock.release();
-            lock = null;
-
-            progressDialog.dismiss();
-
-            if (successful && flag == ASYNC_IDENTIFIER_SEND) {
-                new AsyncSendHttp().execute(receiver.toArray());
-            }
-        }
-
-    }
 
     /**
      * Class that sends the http requests to the clients
      */
-    private class AsyncSendHttp extends AsyncTask<Object, Client, Boolean> {
+    private class AsyncSendHttp extends AsyncTask<Client, Client, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Object... receivers) {
+        protected Boolean doInBackground(Client... receivers) {
 
             int retry = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_retry_key), "0"));
 
-            for (Object obj : receivers) {
+            // Prepare httpClient
+            HttpParams httpParameters = new BasicHttpParams();
+            // Set the timeout in milliseconds until a connection is established.
+            int timeoutConfig = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_timeout_key), "2"));
+            int timeoutConnection = 1000 * timeoutConfig;
+            HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+            // Set the default socket timeout (SO_TIMEOUT)
+            // in milliseconds which is the timeout for waiting for data.
+            int timeoutSocket = 1000 * timeoutConfig;
+            HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+            DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-                if (!(obj instanceof Client)) {
-                    continue;
-                }
-                Client client = (Client) obj;
+            //Prepare httpRequest
+            List<NameValuePair> nameValuePairs = new ArrayList<>(2);
+            nameValuePairs.add(new BasicNameValuePair("song", act));
+
+            DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
+            Song song = null;
+            try {
+                song = dbh.getSongById(Integer.parseInt(act));
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+            nameValuePairs.add(new BasicNameValuePair("title", (song == null) ? "" : song.getTitle()));
+            nameValuePairs.add(new BasicNameValuePair("artist", (song == null) ? "" : song.getArtist()));
+
+            for (Client client : receivers) {
+
                 boolean clientSuc = false;
 
                 for (int i=0; i<=retry; i++) {
@@ -750,35 +591,8 @@ public class ElanSenderActivity extends Activity implements SensorEventListener,
                     try {
 
                         URI uri = new URL("http", client.ip, client.port, "").toURI();
-
-                        HttpParams httpParameters = new BasicHttpParams();
-
-                        // Set the timeout in milliseconds until a connection is established.
-                        // The default value is zero, that means the timeout is not used.
-                        int timeoutConfig = Integer.parseInt(sharedPreferences.getString(getResources().getString(R.string.pref_timeout_key), "2"));
-                        int timeoutConnection = 1000 * timeoutConfig;
-                        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-                        // Set the default socket timeout (SO_TIMEOUT)
-                        // in milliseconds which is the timeout for waiting for data.
-                        int timeoutSocket = 1000 * timeoutConfig;
-                        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-                        DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
                         HttpPost httpPost = new HttpPost(uri);
 
-                        // Add your data
-                        List<NameValuePair> nameValuePairs = new ArrayList<>(2);
-                        nameValuePairs.add(new BasicNameValuePair("song", act));
-
-                        DatabaseHandler dbh = new DatabaseHandler(ElanSenderActivity.this);
-                        Song song = null;
-                        try {
-                            song = dbh.getSongById(Integer.parseInt(act));
-                        } catch (NumberFormatException e) {
-                            // ignore
-                        }
-                        nameValuePairs.add(new BasicNameValuePair("title", (song == null) ? "" : song.getTitle()));
-                        nameValuePairs.add(new BasicNameValuePair("artist", (song == null) ? "" : song.getArtist()));
                         httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                         // Execute HTTP Post Request
