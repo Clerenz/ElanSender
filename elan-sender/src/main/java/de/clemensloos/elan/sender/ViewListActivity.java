@@ -1,7 +1,9 @@
 package de.clemensloos.elan.sender;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,9 +38,10 @@ public class ViewListActivity extends Activity {
         okay = ((Button)findViewById(R.id.but_okay_import));
         okay.setEnabled(true);
         cancel = ((Button)findViewById(R.id.but_cancel_import));
-        cancel.setEnabled(false);
+        cancel.setText(R.string.label_delete);
+        cancel.setEnabled(true);
 
-        DatabaseHandler dbh = new DatabaseHandler(ViewListActivity.this);
+        final DatabaseHandler dbh = new DatabaseHandler(ViewListActivity.this);
 
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -64,6 +67,32 @@ public class ViewListActivity extends Activity {
                 finish();
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewListActivity.this);
+                builder.setMessage("Delete song list?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dbh.clearSongs();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // nothing
+                            }
+                        }).show();
+            }
+        });
+
+
+
+
 
     }
 }
