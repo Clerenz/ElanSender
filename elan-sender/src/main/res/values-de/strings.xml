@@ -33,5 +33,4 @@
     <string name="title_activity_wifi_query">Durchsuche Netzwerk</string>
     <string name="menu_songlist">Songliste</string>
     <string name="title_activity_songlist">Songliste</string>
-    <string name="label_delete">Löschen</string>
 </resources>
