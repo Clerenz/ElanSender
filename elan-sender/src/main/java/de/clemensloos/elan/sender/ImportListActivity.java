@@ -35,6 +35,7 @@ public class ImportListActivity extends Activity {
 
     List<Song> songList;
     Button okay;
+    Button cancel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,8 @@ public class ImportListActivity extends Activity {
         setContentView(R.layout.import_list);
         okay = ((Button)findViewById(R.id.but_okay_import));
         okay.setEnabled(false);
+        cancel = ((Button)findViewById(R.id.but_cancel_import));
+        cancel.setEnabled(true);
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -100,7 +103,7 @@ public class ImportListActivity extends Activity {
                 finish();
             }
 
-            ((Button)findViewById(R.id.but_cancel_import)).setOnClickListener(new View.OnClickListener() {
+            cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();

@@ -265,6 +265,9 @@ public class ElanSenderActivity extends Activity implements SensorEventListener 
         } else if (item.getItemId() == R.id.menu_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        } else if (item.getItemId() == R.id.menu_songlist) {
+            Intent intent = new Intent(this, ViewListActivity.class);
+            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_search_clients) {
             Intent intent = new Intent(this, WifiQueryActivity.class);
             startActivity(intent);

@@ -43,6 +43,14 @@
                 android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
         </activity>
         <activity
+            android:name=".ViewListActivity"
+            android:label="@string/title_activity_songlist"
+            android:parentActivityName=".ElanSenderActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.clemensloos.elan.sender.ElanSenderActivity" />
+        </activity>
+        <activity
             android:name=".ImportListActivity"
             android:label="@string/title_activity_import">
             <intent-filter>

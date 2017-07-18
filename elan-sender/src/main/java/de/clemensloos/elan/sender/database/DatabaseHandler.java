@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -80,17 +81,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String query = "Select * FROM " + TABLE_SONGS + " WHERE " + COLUMN_ID + " =  \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        String title, artist;
+        String title = "", artist = "";
         if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
             title = cursor.getString(1);
             artist = cursor.getString(2);
-            cursor.close();
-        } else {
-            return new Song(id, "", "");
         }
+        cursor.close();
         db.close();
         return new Song(id, title, artist);
+    }
+
+    public List<Song> getAllSongs() {
+
+        List<Song> all = new LinkedList<Song>();
+        String query = "Select * FROM " + TABLE_SONGS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            all.add(new Song(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+        }
+        cursor.close();
+        db.close();
+
+        return all;
     }
 
 
