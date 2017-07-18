@@ -39,38 +39,16 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Analyzing results"
-        android:id="@+id/textView_analyze"
-        android:layout_below="@+id/progressBar_discovery"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar_analyze"
-        android:layout_below="@+id/textView_analyze"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/progressBar_analyze"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/textView_status">
+        android:layout_above="@+id/textView_status"
+        android:layout_below="@+id/progressBar_discovery">
 
         <TextView
             android:layout_width="0px"
@@ -78,14 +56,6 @@
             android:layout_height="match_parent"
             android:text="Devices:"
             android:id="@+id/textView_results"
-            android:layout_margin="5dp" />
-
-        <TextView
-            android:layout_width="0px"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:text="Receiver:"
-            android:id="@+id/textView_cleanedResults"
             android:layout_margin="5dp" />
 
     </LinearLayout>
@@ -106,6 +76,15 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/but_cancel_results"
+        android:layout_alignBottom="@+id/but_use_results"
+        android:layout_toLeftOf="@+id/but_add_results" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/but_add_results"
+        android:enabled="false"
         android:layout_alignBottom="@+id/but_use_results"
         android:layout_toLeftOf="@+id/but_use_results" />
 

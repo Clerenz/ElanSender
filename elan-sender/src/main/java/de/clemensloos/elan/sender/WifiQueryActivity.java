@@ -34,17 +34,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class WifiQueryActivity extends Activity {
 
     private Button start;
     private Button cancel;
+    private Button add;
     private Button okay;
     private TextView devicesList;
-    private TextView filteredDevices;
     private ProgressBar progressDevices;
-    private ProgressBar progressAnalyze;
     private TextView status;
 
     private boolean discoveryRunning = false;
@@ -61,17 +63,17 @@ public class WifiQueryActivity extends Activity {
 
         start = ((Button)findViewById(R.id.but_start_query));
         cancel = ((Button)findViewById(R.id.but_cancel_results));
+        add = ((Button)findViewById(R.id.but_add_results));
         okay = ((Button)findViewById(R.id.but_use_results));
         devicesList = ((TextView) findViewById(R.id.textView_results));
-        filteredDevices = ((TextView) findViewById(R.id.textView_cleanedResults));
         progressDevices = ((ProgressBar)findViewById(R.id.progressBar_discovery));
-        progressAnalyze = ((ProgressBar)findViewById(R.id.progressBar_analyze));
         status = ((TextView)findViewById(R.id.textView_status));
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 start.setEnabled(false);
+                add.setEnabled(false);
                 okay.setEnabled(false);
                 discoveryRunning = true;
                 lastResults = null;
@@ -86,6 +88,21 @@ public class WifiQueryActivity extends Activity {
                     discoveryRunning = false;
                 }
                 else {
+                    finish();
+                }
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastResults != null && lastResults.size() > 0) {
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(WifiQueryActivity.this);
+                    String oldValues = sharedPrefs.getString(getResources().getString(R.string.pref_ip_key), "");
+                    String result = combine(oldValues, lastResults);
+                    SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
+                    sharedPrefsEditor.putString(getResources().getString(R.string.pref_ip_key), result);
+                    sharedPrefsEditor.commit();
                     finish();
                 }
             }
@@ -124,6 +141,22 @@ public class WifiQueryActivity extends Activity {
     }
 
 
+    private String combine(String oldValues, List<String> newValues) {
+
+        Set<String> stringSet = new HashSet<>(Arrays.asList(oldValues.split(",")));
+        stringSet.addAll(newValues);
+
+        String[] stringArray = stringSet.toArray(new String[stringSet.size()]);
+        Arrays.sort(stringArray);
+
+        String result = "";
+        for (String s : stringArray) {
+            result += s + ",";
+        }
+        return result;
+    }
+
+
     public String getIpAddr() {
         WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -145,15 +178,11 @@ public class WifiQueryActivity extends Activity {
                 @Override
                 public void run() {
                     progressDevices.setProgress(0);
-                    progressAnalyze.setProgress(0);
-                    progressAnalyze.setIndeterminate(true);
                     devicesList.setText("Devices:");
-                    filteredDevices.setText("Receiver:");
                     status.setText("");
                 }
             });
 
-            final List<String> foundDevices = new ArrayList<>();
             List<String> activeDevices = new ArrayList<>();
 
             String ipAddress = getIpAddr();
@@ -176,63 +205,20 @@ public class WifiQueryActivity extends Activity {
                 }
 
                 try {
-
+//
                     ip[3] = (byte) i;
-                    final InetAddress address = InetAddress.getByAddress(ip);
+                    String hostAddress = InetAddress.getByAddress(ip).getHostAddress();
 
-                    for (int j=1; j<=3; j++) {
-                        if (address.isReachable(j*100)) {
-                            foundDevices.add(address.getHostAddress());
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    devicesList.append("\n" + address.getHostAddress());
-                                }
-                            });
-                            break;
-                        }
-                    }
-                    final int progress = i;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDevices.setProgress(progress);
-                        }
-                    });
-
-                }
-                catch( IOException e) {
-                    // ignore
-                }
-            }
-
-            discoveryRunning = true;
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progressAnalyze.setIndeterminate(false);
-                    progressAnalyze.setMax(foundDevices.size());
-                    progressAnalyze.setProgress(0);
-                }
-            });
-            int progress = 0;
-            for (String hostAddress : foundDevices) {
-                if (!discoveryRunning) {
-                    break;
-                }
-
-                try {
                     URI uri = new URL("http", hostAddress, defaultPort, "alive").toURI();
 
                     HttpParams httpParameters = new BasicHttpParams();
                     // Set the timeout in milliseconds until a connection is established.
                     // The default value is zero, that means the timeout is not used.
-                    int timeoutConnection = 1000;
+                    int timeoutConnection = 500;
                     HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
                     // Set the default socket timeout (SO_TIMEOUT)
                     // in milliseconds which is the timeout for waiting for data.
-                    int timeoutSocket = 1000;
+                    int timeoutSocket = 500;
                     HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
                     DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
@@ -249,19 +235,19 @@ public class WifiQueryActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                filteredDevices.append("\n" + finalHostAddress);
+                                devicesList.append("\n" + finalHostAddress);
                             }
                         });
                     }
                 } catch (URISyntaxException | IOException e) {
                     // ignore
                 }
-                progress++;
-                final int finalProgress = progress;
+
+                final int progress = i;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        progressAnalyze.setProgress(finalProgress);
+                        progressDevices.setProgress(progress);
                     }
                 });
             }
@@ -273,17 +259,16 @@ public class WifiQueryActivity extends Activity {
 
         public void onCancelled(List<String> result) {
             start.setEnabled(true);
-            progressAnalyze.setIndeterminate(false);
             status.setText(result.get(0));
         }
 
 
         public void onPostExecute(List<String> result) {
             start.setEnabled(true);
-            progressAnalyze.setIndeterminate(false);
             status.setText("Found " + result.size() + " devices running the receiver.");
             if (result.size() > 0) {
                 lastResults = result;
+                add.setEnabled(true);
                 okay.setEnabled(true);
             }
 
