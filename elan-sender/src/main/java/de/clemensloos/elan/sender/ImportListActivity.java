@@ -47,6 +47,7 @@ public class ImportListActivity extends Activity {
         okay = ((Button)findViewById(R.id.but_okay_import));
         okay.setEnabled(false);
         cancel = ((Button)findViewById(R.id.but_cancel_import));
+        cancel.setText(R.string.label_cancel);
         cancel.setEnabled(true);
 
         Intent intent = getIntent();
